@@ -3,6 +3,6 @@
   "include": [
     "packages/*/bin/**/*.ts",
     "packages/*/lib/**/*.ts",
-    "packages/*/test/**/*-test.ts"
+    "packages/*/test/**/*.test.ts"
   ]
 }
