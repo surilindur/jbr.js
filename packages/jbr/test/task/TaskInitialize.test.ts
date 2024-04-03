@@ -1,4 +1,5 @@
-import * as Path from 'path';
+import type { PathLike } from 'node:fs';
+import * as Path from 'node:path';
 import { createExperimentPaths } from '../../lib/cli/CliHelpers';
 import type { ExperimentHandler } from '../../lib/experiment/ExperimentHandler';
 import type { NpmInstaller } from '../../lib/npm/NpmInstaller';
@@ -11,16 +12,16 @@ let files: Record<string, string> = {};
 let filesOut: Record<string, string> = {};
 let filesDeleted: Record<string, boolean> = {};
 let dirsOut: Record<string, boolean> = {};
-jest.mock('fs-extra', () => ({
+jest.mock<typeof import('fs-extra')>('fs-extra', () => ({
   ...jest.requireActual('fs-extra'),
-  async writeFile(filePath: string, contents: string) {
-    filesOut[filePath] = contents;
+  async writeFile(file: number | PathLike, contents: string) {
+    filesOut[file.toString()] = contents;
   },
-  async remove(filePath: string) {
-    filesDeleted[filePath] = true;
+  async remove(path: PathLike) {
+    filesDeleted[path.toString()] = true;
   },
-  async mkdir(dirPath: string) {
-    dirsOut[dirPath] = true;
+  async mkdir(path: PathLike) {
+    dirsOut[path.toString()] = true;
   },
   async pathExists(filePath: string) {
     return filePath in files;
@@ -34,7 +35,7 @@ jest.mock('fs-extra', () => ({
 }));
 
 let experimentLoader: ExperimentLoader;
-jest.mock('../../lib/task/ExperimentLoader', () => ({
+jest.mock<typeof import('../../lib/task/ExperimentLoader')>('../../lib/task/ExperimentLoader', () => ({
   ExperimentLoader: {
     ...jest.requireActual('../../lib/task/ExperimentLoader').ExperimentLoader,
     build: jest.fn(() => experimentLoader),
@@ -45,7 +46,8 @@ jest.mock('../../lib/task/ExperimentLoader', () => ({
 }));
 
 let taskGenerateCombinations: any;
-jest.mock('../../lib/task/TaskGenerateCombinations', () => ({
+// eslint-disable-next-line max-len
+jest.mock<typeof import('../../lib/task/TaskGenerateCombinations')>('../../lib/task/TaskGenerateCombinations', () => <any> ({
   TaskGenerateCombinations: jest.fn().mockImplementation(() => ({
     generate: taskGenerateCombinations,
   })),
@@ -110,7 +112,7 @@ describe('TaskInitialize', () => {
 
   describe('init', () => {
     it('initializes a valid experiment', async() => {
-      expect(await task.init()).toEqual({
+      await expect(task.init()).resolves.toEqual({
         experimentDirectory: Path.join('CWD', 'TARGETDIR'),
         hookNames: [ 'hook1', 'hook2' ],
       });
@@ -213,7 +215,7 @@ describe('TaskInitialize', () => {
       npmInstaller,
     );
 
-    expect(await task.init()).toBeTruthy();
+    await expect(task.init()).resolves.toBeTruthy();
 
     expect(npmInstaller.install)
       .toHaveBeenCalledWith('CWD/TARGETDIR', [ 'jbr', '@jbr-experiment/TYPE' ], 'jbr-experiment');
@@ -230,12 +232,12 @@ describe('TaskInitialize', () => {
       npmInstaller,
     );
 
-    expect(await task.init()).toEqual({
+    await expect(task.init()).resolves.toEqual({
       experimentDirectory: Path.join('CWD', 'TARGETDIR'),
       hookNames: [ 'hook1', 'hook2' ],
     });
 
-    expect(taskGenerateCombinations).toHaveBeenCalled();
+    expect(taskGenerateCombinations).toHaveBeenCalledTimes(1);
 
     expect(handler.init)
       .toHaveBeenCalledWith(createExperimentPaths(Path.join('CWD', 'TARGETDIR')), { CONFIG: 'EXP-NAME' });
