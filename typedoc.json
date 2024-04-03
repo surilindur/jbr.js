@@ -1,0 +1,10 @@
+{
+  "entryPoints": [
+    "packages/*"
+  ],
+  "name": "jbr",
+  "out": "documentation",
+  "theme": "default",
+  "entryPointStrategy": "packages",
+  "includeVersion": false
+}

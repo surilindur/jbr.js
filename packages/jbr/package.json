@@ -2,8 +2,8 @@
   "name": "jbr",
   "version": "3.0.2",
   "description": "Just a Benchmark Runner",
-  "main": "index.js",
-  "typings": "index",
+  "main": "lib/index.js",
+  "typings": "lib/index",
   "lsd:module": true,
   "author": "Ruben Taelman <rubensworks@gmail.com>",
   "repository": {
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/rubensworks/jbr.js#readme",
   "license": "MIT",
-  "bin": "bin/jbr",
+  "bin": "bin/jbr.js",
   "keywords": [
     "jbr",
     "just a benchmark runner",
@@ -29,56 +29,37 @@
   "files": [
     "bin/**/*.d.ts",
     "bin/**/*.js",
-    "bin/jbr",
     "lib/**/*.d.ts",
     "lib/**/*.js",
     "lib/**/*.json",
     "lib/templates",
     "lib/templates/.gitignore",
-    "index.d.ts",
-    "index.ts",
     "components"
   ],
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "../../tsconfig.json"
-      }
-    },
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testRegex": "/test/.*.test.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "collectCoverage": true
-  },
   "scripts": {
     "test": "node \"../../node_modules/jest/bin/jest.js\" ${1}",
     "test-watch": "node \"../../node_modules/jest/bin/jest.js\" ${1} --watch",
     "build": "node \"../../node_modules/typescript/bin/tsc\"",
-    "validate": "npm ls"
+    "validate": "yarn list"
   },
   "dependencies": {
-    "@types/cli-progress": "^3.9.1",
-    "@types/cross-spawn": "^6.0.2",
-    "@types/dockerode": "^3.2.3",
-    "@types/fs-extra": "^9.0.11",
-    "@types/semver": "^7.5.1",
-    "@types/tar": "^4.0.5",
+    "@types/cli-progress": "^3.0.0",
+    "@types/cross-spawn": "^6.0.0",
+    "@types/dockerode": "^3.0.0",
+    "@types/fs-extra": "^9.0.0",
+    "@types/semver": "^7.0.0",
+    "@types/tar": "^4.0.0",
     "@types/yargs": "^17.0.0",
-    "cli-progress": "^3.9.0",
-    "componentsjs": "^5.2.0",
+    "cli-progress": "^3.0.0",
+    "componentsjs": "^5.0.0",
     "cross-fetch": "^4.0.0",
-    "cross-spawn": "^7.0.3",
-    "dockerode": "^3.3.0",
+    "cross-spawn": "^7.0.0",
+    "dockerode": "^3.0.0",
     "fs-extra": "^10.0.0",
-    "ora": "^5.4.0",
-    "semver": "^7.5.4",
-    "tar": "^6.1.7",
-    "winston": "^3.3.3",
+    "ora": "^5.0.0",
+    "semver": "^7.0.0",
+    "tar": "^6.0.0",
+    "winston": "^3.0.0",
     "yargs": "^17.0.0"
   },
   "engines": {

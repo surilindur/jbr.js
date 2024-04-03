@@ -3,10 +3,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "lib": [
-      "es2019",
+      "es2021",
       "dom"
     ],
-    "target": "es2017",
+    "target": "es2021",
     "noImplicitAny": true,
     "removeComments": false,
     "preserveConstEnums": true,
@@ -15,16 +15,11 @@
     "declaration": true,
     "importHelpers": false,
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": [
-    "packages/*/index.ts",
-    "packages/*/index-browser.ts",
-    "packages/*/bin/**/*",
-    "packages/*/lib/**/*"
-  ],
-  "exclude": [
-    "**/node_modules",
-    "**/test/*"
+    "packages/*/bin/**/*.ts",
+    "packages/*/lib/**/*.ts"
   ]
 }
