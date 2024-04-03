@@ -43,7 +43,7 @@ jest.mock<typeof import('../../lib/task/ExperimentLoader')>('../../lib/task/Expe
 
 let taskGenerateCombinations: any;
 // eslint-disable-next-line max-len
-jest.mock<typeof import('../../lib/task/TaskGenerateCombinations')>('../../lib/task/TaskGenerateCombinations', () => <typeof import('../../lib/task/TaskGenerateCombinations')> <unknown> ({
+jest.mock<typeof import('../../lib/task/TaskGenerateCombinations')>('../../lib/task/TaskGenerateCombinations', () => <any> ({
   TaskGenerateCombinations: jest.fn().mockImplementation(() => ({
     generate: taskGenerateCombinations,
   })),
