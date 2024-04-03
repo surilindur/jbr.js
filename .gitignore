@@ -1,9 +1,10 @@
 **/.husky/_
 **/.idea/
+**/.yarn/
 **/components/
 **/coverage/
+**/CWD/
 **/node_modules/
-**/.yarn/
 **/bin/**/*.js
 **/bin/**/*.js.map
 **/bin/**/*.d.ts

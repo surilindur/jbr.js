@@ -3,7 +3,7 @@ module.exports = {
   transform: {
     '^.+\\.ts$': [ 'ts-jest' ],
   },
-  testRegex: [ '/test/.+-test.ts$' ],
+  testRegex: [ '/test/.+\\.test.ts$' ],
   testPathIgnorePatterns: [
     '.*.d.ts',
   ],
@@ -14,6 +14,8 @@ module.exports = {
   collectCoverage: true,
   coveragePathIgnorePatterns: [
     '/node_modules/',
+    '/cli/',
+    '/lib/index',
   ],
   testEnvironment: 'node',
   coverageThreshold: {
