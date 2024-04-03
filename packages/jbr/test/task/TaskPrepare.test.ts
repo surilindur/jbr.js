@@ -1,4 +1,5 @@
-import * as Path from 'path';
+import type { PathLike } from 'node:fs';
+import * as Path from 'node:path';
 import { createExperimentPaths } from '../../lib/cli/CliHelpers';
 import type { Experiment } from '../../lib/experiment/Experiment';
 import type { ExperimentLoader } from '../../lib/task/ExperimentLoader';
@@ -7,7 +8,7 @@ import { TaskPrepare } from '../../lib/task/TaskPrepare';
 import { TestLogger } from '../TestLogger';
 
 let experimentLoader: ExperimentLoader;
-jest.mock('../../lib/task/ExperimentLoader', () => ({
+jest.mock<typeof import('../../lib/task/ExperimentLoader')>('../../lib/task/ExperimentLoader', () => ({
   ExperimentLoader: {
     ...jest.requireActual('../../lib/task/ExperimentLoader').ExperimentLoader,
     build: jest.fn(() => experimentLoader),
@@ -18,17 +19,17 @@ jest.mock('../../lib/task/ExperimentLoader', () => ({
 
 let files: Record<string, string | boolean> = {};
 let filesUnlinked: Record<string, boolean> = {};
-jest.mock('fs-extra', () => ({
+jest.mock<typeof import('fs-extra')>('fs-extra', () => ({
   ...jest.requireActual('fs-extra'),
   async pathExists(filePath: string) {
     return filePath in files;
   },
-  async unlink(filePath: string) {
-    filesUnlinked[filePath] = true;
-    delete files[filePath];
+  async unlink(path: PathLike) {
+    filesUnlinked[path.toString()] = true;
+    delete files[path.toString()];
   },
-  async writeFile(filePath: string, data: string) {
-    files[filePath] = data;
+  async writeFile(file: number | PathLike, data: string) {
+    files[file.toString()] = data;
   },
 }));
 
@@ -76,7 +77,7 @@ describe('TaskPrepare', () => {
         .toHaveBeenCalledWith(context, false);
 
       expect(filesUnlinked[Path.join('CWD', 'generated', '.prepared')]).toBeFalsy();
-      expect(files[Path.join('CWD', 'generated', '.prepared')]).toEqual('');
+      expect(files[Path.join('CWD', 'generated', '.prepared')]).toBe('');
 
       expect(context.logger.info).toHaveBeenCalledTimes(1);
     });
@@ -93,7 +94,7 @@ describe('TaskPrepare', () => {
         .toHaveBeenCalledWith(context, true);
 
       expect(filesUnlinked[Path.join('CWD', 'generated', '.prepared')]).toBeFalsy();
-      expect(files[Path.join('CWD', 'generated', '.prepared')]).toEqual('');
+      expect(files[Path.join('CWD', 'generated', '.prepared')]).toBe('');
 
       expect(context.logger.info).toHaveBeenCalledTimes(1);
     });
@@ -106,7 +107,7 @@ describe('TaskPrepare', () => {
         .toHaveBeenCalledWith(context, false);
 
       expect(filesUnlinked[Path.join('CWD', 'generated', '.prepared')]).toBeTruthy();
-      expect(files[Path.join('CWD', 'generated', '.prepared')]).toEqual('');
+      expect(files[Path.join('CWD', 'generated', '.prepared')]).toBe('');
 
       expect(context.logger.info).toHaveBeenCalledTimes(1);
     });
@@ -120,12 +121,10 @@ describe('TaskPrepare', () => {
       };
       const expPaths1 = createExperimentPaths('CWD/1');
       const expPaths2 = createExperimentPaths('CWD/2');
-      (<any> experimentLoader).instantiateExperiments = jest.fn(() => {
-        return {
-          experimentPathsArray: [ expPaths1, expPaths2 ],
-          experiments: [ experiment1, experiment2 ],
-        };
-      });
+      jest.spyOn(experimentLoader, 'instantiateExperiments').mockImplementation(() => <any> ({
+        experimentPathsArray: [ expPaths1, expPaths2 ],
+        experiments: [ experiment1, experiment2 ],
+      }));
 
       await task.prepare();
       expect(experiment1.prepare)
@@ -134,7 +133,7 @@ describe('TaskPrepare', () => {
         .toHaveBeenCalledWith({ ...context, experimentPaths: expPaths2 }, false);
 
       expect(filesUnlinked[Path.join('CWD', 'generated', '.prepared')]).toBeFalsy();
-      expect(files[Path.join('CWD', 'generated', '.prepared')]).toEqual('');
+      expect(files[Path.join('CWD', 'generated', '.prepared')]).toBe('');
 
       expect(context.logger.info).toHaveBeenCalledTimes(2);
     });
@@ -150,12 +149,10 @@ describe('TaskPrepare', () => {
       };
       const expPaths1 = createExperimentPaths('CWD/1');
       const expPaths2 = createExperimentPaths('CWD/2');
-      (<any> experimentLoader).instantiateExperiments = jest.fn(() => {
-        return {
-          experimentPathsArray: [ expPaths1, expPaths2 ],
-          experiments: [ experiment1, experiment2 ],
-        };
-      });
+      jest.spyOn(experimentLoader, 'instantiateExperiments').mockImplementation(() => <any> ({
+        experimentPathsArray: [ expPaths1, expPaths2 ],
+        experiments: [ experiment1, experiment2 ],
+      }));
 
       await task.prepare();
       expect(experiment1.prepare)
@@ -164,7 +161,7 @@ describe('TaskPrepare', () => {
         .toHaveBeenCalledWith({ ...context, experimentPaths: expPaths2 }, false);
 
       expect(filesUnlinked[Path.join('CWD', 'generated', '.prepared')]).toBeFalsy();
-      expect(files[Path.join('CWD', 'generated', '.prepared')]).toEqual('');
+      expect(files[Path.join('CWD', 'generated', '.prepared')]).toBe('');
 
       expect(context.logger.info).toHaveBeenCalledTimes(1);
     });
@@ -178,13 +175,11 @@ describe('TaskPrepare', () => {
       };
       const expPaths1 = createExperimentPaths('CWD1');
       const expPaths2 = createExperimentPaths('CWD1');
-      (<any> experimentLoader).instantiateExperiments = jest.fn(() => {
-        return {
-          combinationProvider: { commonPrepare: true },
-          experimentPathsArray: [ expPaths1, expPaths2 ],
-          experiments: [ experiment1, experiment2 ],
-        };
-      });
+      jest.spyOn(experimentLoader, 'instantiateExperiments').mockImplementation(() => <any> ({
+        combinationProvider: { commonPrepare: true },
+        experimentPathsArray: [ expPaths1, expPaths2 ],
+        experiments: [ experiment1, experiment2 ],
+      }));
 
       await task.prepare();
       expect(experiment1.prepare)
@@ -193,7 +188,7 @@ describe('TaskPrepare', () => {
         .toHaveBeenCalledWith({ ...context, experimentPaths: expPaths2 }, false);
 
       expect(filesUnlinked[Path.join('CWD', 'generated', '.prepared')]).toBeFalsy();
-      expect(files[Path.join('CWD', 'generated', '.prepared')]).toEqual('');
+      expect(files[Path.join('CWD', 'generated', '.prepared')]).toBe('');
 
       expect(context.logger.info).toHaveBeenCalledTimes(2);
     });
