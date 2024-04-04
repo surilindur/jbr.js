@@ -1,4 +1,4 @@
-import Path from 'path';
+import Path from 'node:path';
 import * as fs from 'fs-extra';
 import { ErrorHandled } from '../cli/ErrorHandled';
 import { ExperimentLoader } from './ExperimentLoader';
@@ -8,11 +8,13 @@ import type { ITaskContext } from './ITaskContext';
  * Validates an experiment.
  */
 export class TaskValidate {
+  // eslint-disable-next-line ts/naming-convention
   public static readonly REQUIRED_FILES: string[] = [
     ExperimentLoader.CONFIG_NAME,
     ExperimentLoader.PACKAGEJSON_NAME,
   ];
 
+  // eslint-disable-next-line ts/naming-convention
   public static readonly REQUIRED_FILES_COMBINATIONS: string[] = [
     ExperimentLoader.CONFIG_TEMPLATE_NAME,
     ExperimentLoader.COMBINATIONS_NAME,
