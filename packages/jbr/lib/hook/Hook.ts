@@ -2,6 +2,7 @@ import type { ProcessHandler } from '../experiment/ProcessHandler';
 import type { ICleanTargets } from '../task/ICleanTargets';
 import type { ITaskContext } from '../task/ITaskContext';
 
+// eslint-disable-next-line ts/naming-convention
 export interface Hook {
   /**
    * Called when data needs to be prepared for an experiment hook.
