@@ -4,7 +4,7 @@ import type { Hook } from './Hook';
 /**
  * Handler for a certain type of experiment hook.
  */
-export abstract class HookHandler<H extends Hook> {
+export abstract class HookHandler<T extends Hook> {
   /**
    * Unique id of this experiment hook type.
    */
@@ -38,5 +38,5 @@ export abstract class HookHandler<H extends Hook> {
    * @param experimentPaths The experiment directories. (guaranteed to exists)
    * @param hookHandler The experiment hook handler instance.
    */
-  public abstract init(experimentPaths: IExperimentPaths, hookHandler: H): Promise<void>;
+  public abstract init(experimentPaths: IExperimentPaths, hookHandler: T): Promise<void>;
 }
