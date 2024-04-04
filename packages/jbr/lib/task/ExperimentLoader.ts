@@ -1,4 +1,7 @@
-import * as Path from 'path';
+/* eslint-disable ts/no-unsafe-assignment */
+/* eslint-disable ts/no-unsafe-argument */
+/* eslint-disable ts/naming-convention */
+import * as Path from 'node:path';
 import { ComponentsManager } from 'componentsjs';
 import { GenericsContext } from 'componentsjs/lib/preprocess/GenericsContext';
 import {
@@ -7,14 +10,15 @@ import {
 import * as fs from 'fs-extra';
 import { major } from 'semver';
 import type { CombinationProvider } from '../..';
+
+// eslint-disable-next-line import/extensions
+import pJson from '../../package.json';
 import { createExperimentPaths } from '../cli/CliHelpers';
 import { ErrorHandled } from '../cli/ErrorHandled';
 import type { Experiment } from '../experiment/Experiment';
 import type { ExperimentHandler } from '../experiment/ExperimentHandler';
 import type { HookHandler } from '../hook/HookHandler';
 import type { IExperimentPaths } from './ITaskContext';
-
-const pJson = require('../../package.json');
 
 /**
  * Loads and instantiates an experiment by config.
@@ -51,7 +55,7 @@ export class ExperimentLoader {
   public static async getExperimentName(experimentRoot: string): Promise<string> {
     try {
       const data = JSON.parse(await fs.readFile(Path.join(experimentRoot, 'package.json'), 'utf8'));
-      return data.name;
+      return <string>data.name;
     } catch {
       return 'dummy';
     }
