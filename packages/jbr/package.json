@@ -1,41 +1,46 @@
 {
   "name": "jbr",
+  "type": "commonjs",
   "version": "3.0.2",
+  "packageManager": "yarn@4.1.1",
   "description": "Just a Benchmark Runner",
-  "main": "lib/index.js",
-  "typings": "lib/index",
-  "lsd:module": true,
   "author": "Ruben Taelman <rubensworks@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/rubensworks/jbr.js#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/rubensworks/jbr.js.git",
     "directory": "packages/jbr"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "bugs": {
     "url": "https://github.com/rubensworks/jbr.js/issues"
   },
-  "homepage": "https://github.com/rubensworks/jbr.js#readme",
-  "license": "MIT",
-  "bin": "bin/jbr.js",
   "keywords": [
     "jbr",
     "just a benchmark runner",
     "benchmarking",
     "command line"
   ],
+  "main": "lib/index.js",
+  "types": "lib/index",
+  "lsd:module": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": "bin/jbr.js",
   "files": [
     "bin/**/*.d.ts",
     "bin/**/*.js",
+    "components",
     "lib/**/*.d.ts",
     "lib/**/*.js",
     "lib/**/*.json",
     "lib/templates",
-    "lib/templates/.gitignore",
-    "components"
+    "lib/templates/.gitignore"
   ],
+  "engines": {
+    "node": ">=14.0"
+  },
   "scripts": {
     "test": "node \"../../node_modules/jest/bin/jest.js\" ${1}",
     "test-watch": "node \"../../node_modules/jest/bin/jest.js\" ${1} --watch",
@@ -61,8 +66,5 @@
     "tar": "^6.0.0",
     "winston": "^3.0.0",
     "yargs": "^17.0.0"
-  },
-  "engines": {
-    "node": ">=14.0"
   }
 }
