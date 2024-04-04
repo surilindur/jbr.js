@@ -7,6 +7,7 @@
       "dom"
     ],
     "module": "commonjs",
+    "resolveJsonModule": true,
     "strict": true,
     "noImplicitAny": true,
     "declaration": true,
@@ -14,7 +15,6 @@
     "inlineSources": true,
     "preserveConstEnums": true,
     "removeComments": false,
-    "resolveJsonModule": true,
     "sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true
