@@ -1,4 +1,6 @@
-import * as Path from 'path';
+/* eslint-disable ts/naming-convention */
+/* eslint-disable ts/no-unsafe-assignment */
+import * as Path from 'node:path';
 import * as fs from 'fs-extra';
 import { createExperimentPaths } from '../cli/CliHelpers';
 import { ErrorHandled } from '../cli/ErrorHandled';
