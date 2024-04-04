@@ -1,4 +1,4 @@
-import Path from 'path';
+import Path from 'node:path';
 import * as fs from 'fs-extra';
 import type { FactorCombination } from '../factor/CombinationProvider';
 import { ExperimentLoader } from './ExperimentLoader';
@@ -96,12 +96,12 @@ export class TaskGenerateCombinations {
     combinationId: string,
     content: string,
   ): string {
-    content = content.replace(
-      new RegExp(experimentId, 'gu'),
+    content = content.replaceAll(
+      new RegExp(experimentId, 'u'),
       ExperimentLoader.getCombinationExperimentIri(experimentId, combinationId),
     );
     for (const [ key, value ] of Object.entries(combination)) {
-      content = content.replace(new RegExp(`%FACTOR-${key}%`, 'gu'), value);
+      content = content.replaceAll(new RegExp(`%FACTOR-${key}%`, 'u'), <string>value);
     }
     return content;
   }
