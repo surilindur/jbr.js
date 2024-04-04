@@ -3,7 +3,7 @@ import * as fs from 'fs-extra';
 import { DockerContainerCreator } from '../../lib/docker/DockerContainerCreator';
 import { DockerContainerHandler } from '../../lib/docker/DockerContainerHandler';
 
-jest.mock('fs-extra', () => ({
+jest.mock<typeof import('fs-extra')>('fs-extra', () => <typeof import('fs-extra')> <unknown> ({
   createWriteStream: jest.fn(),
 }));
 
@@ -42,7 +42,7 @@ describe('DockerContainerCreator', () => {
       });
       expect(handler).toBeInstanceOf(DockerContainerHandler);
       expect(handler.container).toBe(container);
-      expect(handler.statsFilePath).toEqual('STATSPATH');
+      expect(handler.statsFilePath).toBe('STATSPATH');
 
       expect(dockerode.createContainer).toHaveBeenCalledWith({
         Image: 'IMAGE',
@@ -61,9 +61,8 @@ describe('DockerContainerCreator', () => {
         stdout: true,
         stderr: true,
       });
-      // eslint-disable-next-line import/namespace
       expect(fs.createWriteStream).toHaveBeenCalledWith('LOGPATH', 'utf8');
-      expect(container.start).toHaveBeenCalled();
+      expect(container.start).toHaveBeenCalledTimes(1);
       expect(container.kill).not.toHaveBeenCalled();
       expect(container.remove).not.toHaveBeenCalled();
     });
@@ -88,9 +87,8 @@ describe('DockerContainerCreator', () => {
         stdout: true,
         stderr: true,
       });
-      // eslint-disable-next-line import/namespace
       expect(fs.createWriteStream).toHaveBeenCalledWith('LOGPATH', 'utf8');
-      expect(container.start).toHaveBeenCalled();
+      expect(container.start).toHaveBeenCalledTimes(1);
       expect(container.kill).not.toHaveBeenCalled();
       expect(container.remove).not.toHaveBeenCalled();
     });
@@ -105,7 +103,7 @@ describe('DockerContainerCreator', () => {
     });
 
     it('does nothing for a non-existing container', async() => {
-      dockerode.getContainer = jest.fn();
+      jest.spyOn(dockerode, 'getContainer').mockImplementation();
 
       await creator.remove('C1');
 
@@ -114,7 +112,7 @@ describe('DockerContainerCreator', () => {
     });
 
     it('does nothing for a erroring container removal', async() => {
-      container.remove = jest.fn(() => Promise.reject(new Error('remove container error')));
+      jest.spyOn(container, 'remove').mockRejectedValue(new Error('remove container error'));
 
       await creator.remove('C1');
 
