@@ -50,11 +50,12 @@ export class CliNpmInstaller implements NpmInstaller {
 
   public async fetchPackageNames(scope: string): Promise<{ name: string; description: string; link: string }[]> {
     const response = await fetch(`https://api.npms.io/v2/search?q=scope:${scope}`);
+    // eslint-disable-next-line ts/no-unsafe-assignment
     const data = await response.json();
-    return data.results.map((result: any) => ({
-      name: result.package.name,
-      description: result.package.description,
-      link: result.package.links.npm,
+    return <{ name: string; description: string; link: string }[]> data.results.map((result: any) => ({
+      name: <string>result.package.name,
+      description: <string>result.package.description,
+      link: <string>result.package.links.npm,
     }));
   }
 }
