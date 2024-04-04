@@ -1,3 +1,4 @@
+/* eslint-disable ts/naming-convention */
 import type Dockerode from 'dockerode';
 import * as fs from 'fs-extra';
 import { DockerContainerHandler } from './DockerContainerHandler';
@@ -28,7 +29,7 @@ export class DockerContainerCreator {
       AttachStdout: true,
       AttachStderr: true,
       HostConfig: {
-        ...options.hostConfig || {},
+        ...options.hostConfig,
         ...options.resourceConstraints?.toHostConfig(),
       },
     });
@@ -45,7 +46,6 @@ export class DockerContainerCreator {
 
     // Write output to logs
     if (options.logFilePath) {
-      // eslint-disable-next-line import/namespace
       out.pipe(fs.createWriteStream(options.logFilePath, 'utf8'));
     } else {
       out.resume();

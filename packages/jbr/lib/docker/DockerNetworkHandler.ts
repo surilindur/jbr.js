@@ -25,10 +25,12 @@ export class DockerNetworkHandler implements ProcessHandler {
     };
   }
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   public addTerminationHandler(handler: (processName: string, error?: Error) => void): void {
     // Do nothing
   }
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   public removeTerminationHandler(handler: (processName: string, error?: Error) => void): void {
     // Do nothing
   }

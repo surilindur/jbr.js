@@ -1,6 +1,7 @@
 import type { ICleanTargets } from '../task/ICleanTargets';
 import type { ITaskContext } from '../task/ITaskContext';
 
+// eslint-disable-next-line ts/naming-convention
 export interface Experiment {
   /**
    * Called when data needs to be prepared for an experiment.

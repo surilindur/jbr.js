@@ -1,6 +1,7 @@
 /**
  * Handles a started process.
  */
+// eslint-disable-next-line ts/naming-convention
 export interface ProcessHandler {
   /**
    * Stop and clean this process.

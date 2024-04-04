@@ -28,6 +28,7 @@ export class FullFactorialCombinationProvider implements CombinationProvider {
 
         // Set the value in all copies
         for (const combinationCopy of combinationsCopy) {
+          // eslint-disable-next-line ts/no-unsafe-assignment
           combinationCopy[factor] = value;
         }
       }

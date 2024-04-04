@@ -1,5 +1,7 @@
-import * as Path from 'path';
-import * as util from 'util';
+/* eslint-disable ts/no-unsafe-assignment */
+/* eslint-disable ts/no-unsafe-argument */
+import * as Path from 'node:path';
+import * as util from 'node:util';
 import Dockerode from 'dockerode';
 import * as fs from 'fs-extra';
 import ora from 'ora';
@@ -26,7 +28,7 @@ export function createExperimentPaths(basePath: string, combination?: number): I
 }
 
 export function breakpointBarrier(): Promise<void> {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     process.stdout.write('BREAKPOINT: Press any key to continue\n');
     process.stdin.setRawMode(true);
     process.stdin.on('data', () => {
@@ -44,8 +46,7 @@ export async function wrapCommandHandler(
 
   // Create context
   const dockerode = new Dockerode(argv.dockerOptions ?
-    // eslint-disable-next-line no-sync
-    JSON.parse(await fs.readFile(argv.dockerOptions, 'utf8')) :
+    <Dockerode.DockerOptions>JSON.parse(await fs.readFile(<string>argv.dockerOptions, 'utf8')) :
     undefined);
   const context: ITaskContext = {
     cwd: argv.cwd,
@@ -60,7 +61,6 @@ export async function wrapCommandHandler(
       imagePuller: new DockerImagePuller(dockerode),
       networkCreator: new DockerNetworkCreator(dockerode),
     },
-    // eslint-disable-next-line unicorn/no-process-exit
     closeExperiment: () => process.emit(<any>'SIGTERM'),
     cleanupHandlers: [],
     ...argv.breakpoints ? { breakpointBarrier } : {},
@@ -88,8 +88,11 @@ export async function wrapCommandHandler(
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   };
+  // eslint-disable-next-line ts/no-misused-promises
   process.on('SIGINT', globalCleanupHandler);
+  // eslint-disable-next-line ts/no-misused-promises
   process.on('SIGTERM', globalCleanupHandler);
+  // eslint-disable-next-line ts/no-misused-promises
   process.on('uncaughtException', globalCleanupHandler);
 
   // Run handler
@@ -144,5 +147,9 @@ export function createCliLogger(logLevel: string): Logger {
 }
 
 export async function createNpmInstaller(context: ITaskContext, nextVersion: boolean): Promise<NpmInstaller> {
-  return await fs.pathExists(`${__dirname}/../../test`) && Path.join(process.cwd(), Path.sep).startsWith(Path.join(__dirname, '../../../../')) ? new VoidNpmInstaller() : new CliNpmInstaller(context, nextVersion);
+  return (
+    await fs.pathExists(Path.join(__dirname, '..', '..', 'test')) &&
+    Path.join(process.cwd(), Path.sep).startsWith(Path.join(__dirname, '../../../../'))) ?
+    new VoidNpmInstaller() :
+    new CliNpmInstaller(context, nextVersion);
 }

@@ -1,4 +1,4 @@
-/* eslint-disable no-bitwise,id-length */
+/* eslint-disable ts/naming-convention */
 import type Dockerode from 'dockerode';
 import type { DockerResourceConstraints } from './DockerResourceConstraints';
 

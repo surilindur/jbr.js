@@ -4,7 +4,7 @@ import type { Experiment } from './Experiment';
 /**
  * Handler for a certain type of experiment.
  */
-export abstract class ExperimentHandler<E extends Experiment> {
+export abstract class ExperimentHandler<T extends Experiment> {
   /**
    * Unique id of this experiment type.
    */
@@ -37,5 +37,5 @@ export abstract class ExperimentHandler<E extends Experiment> {
    * @param experimentPaths The experiment directories. (guaranteed to exists)
    * @param experiment The experiment instance.
    */
-  public abstract init(experimentPaths: IExperimentPaths, experiment: E): Promise<void>;
+  public abstract init(experimentPaths: IExperimentPaths, experiment: T): Promise<void>;
 }

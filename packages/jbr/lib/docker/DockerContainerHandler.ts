@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import type Dockerode from 'dockerode';
 import type { ProcessHandler } from '../experiment/ProcessHandler';
 
@@ -71,7 +71,7 @@ export class DockerContainerHandler implements ProcessHandler {
   public async startCollectingStats(): Promise<() => void> {
     // Just consume the stats stream if we don't have a statsFilePath
     if (!this.statsFilePath) {
-      const statsStream: NodeJS.ReadableStream = <any> await this.container.stats({});
+      const statsStream = <NodeJS.ReadableStream> <unknown> await this.container.stats({});
       statsStream.resume();
       return () => {
         statsStream.removeAllListeners('data');
@@ -83,7 +83,7 @@ export class DockerContainerHandler implements ProcessHandler {
     out.write('cpu_percentage,memory,memory_percentage,received,transmitted\n');
 
     // Read the stats stream
-    const statsStream: NodeJS.ReadableStream = <any> await this.container.stats({});
+    const statsStream = <NodeJS.ReadableStream> <unknown> await this.container.stats({});
     statsStream.setEncoding('utf8');
     let first = true;
     statsStream.on('data', (stats: string) => {
@@ -98,6 +98,7 @@ export class DockerContainerHandler implements ProcessHandler {
 
           let data;
           try {
+            // eslint-disable-next-line ts/no-unsafe-assignment
             data = JSON.parse(line);
           } catch {
             continue;
@@ -117,12 +118,14 @@ export class DockerContainerHandler implements ProcessHandler {
           }
 
           // Calculate memory usage
+          // eslint-disable-next-line ts/no-unsafe-assignment
           const memory = data.memory_stats.usage;
           const memoryPercentage = data.memory_stats.usage / data.memory_stats.limit * 100;
 
           // Calculate I/O
           let receivedBytes = 0;
           let transmittedBytes = 0;
+          // eslint-disable-next-line ts/no-unsafe-argument
           for (const network of Object.keys(data.networks)) {
             receivedBytes += data.networks[network].rx_bytes;
             transmittedBytes += data.networks[network].tx_bytes;
