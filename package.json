@@ -1,6 +1,7 @@
 {
-  "private": true,
   "name": "jbr-monorepo",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
   "repository": "https://github.com/rubensworks/jbr.js/",
   "workspaces": [
     "packages/*"
@@ -8,36 +9,10 @@
   "engines": {
     "node": ">=18.0"
   },
-  "jest": {
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testRegex": "/test/.*.test.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "collectCoverage": true,
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/mocks/",
-      "index.js",
-      "packages/jbr/lib/cli"
-    ],
-    "testEnvironment": "node",
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    }
-  },
   "scripts": {
     "test-changed": "lerna run test --since HEAD",
     "build-changed": "lerna run build --since HEAD",
-    "build": "npm run build:ts && npm run build:components",
+    "build": "yarn run build:ts && yarn run build:components",
     "build:ts": "tsc",
     "build:components": "componentsjs-generator packages/*",
     "build-watch": "tsc --watch",
@@ -46,49 +21,31 @@
     "publish-bare": "lerna exec -- npm publish --silent",
     "publish-canary": "yarn run build && lerna version prerelease --preid alpha.$(git rev-parse --short HEAD) --ignore-scripts --force-publish --no-push --no-git-tag-version --yes && git update-index --assume-unchanged $(git ls-files | tr '\\n' ' ') && lerna publish from-package --no-git-reset --pre-dist-tag next --force-publish --no-push --no-git-tag-version --yes && git update-index --no-assume-unchanged $(git ls-files | tr '\\n' ' ') && git checkout .",
     "test": "jest --runInBand",
-    "test-ci": "jest --ci --maxWorkers=4 --coverage",
-    "lint": "eslint . --ext .ts --cache",
-    "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",
-    "postinstall": "yarn run build && lerna run prepare",
+    "test-ci": "jest --ci",
+    "lint": "eslint . --cache",
+    "clean": "git clean -dfx",
+    "postinstall": "yarn run build",
     "version": "manual-git-changelog onversion",
-    "prepare": "husky install",
+    "prepare": "husky",
     "doc": "typedoc"
   },
   "devDependencies": {
-    "@lerna/project": "^6.4.1",
-    "@rubensworks/eslint-config": "1.0.1",
-    "@strictsoftware/typedoc-plugin-monorepo": "^0.4.2",
+    "@rubensworks/eslint-config": "^3.0.0",
     "@types/jest": "^29.0.0",
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "componentsjs-generator": "^4.3.0",
-    "eslint": "^7.9.0",
-    "eslint-config-es": "3.23.0",
-    "eslint-import-resolver-typescript": "^2.3.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^26.0.0",
-    "eslint-plugin-tsdoc": "^0.2.7",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "fs-extra": "^10.0.0",
+    "componentsjs-generator": "^4.0.0",
+    "eslint": "^8.0.0",
+    "fs-extra": "^11.0.0",
     "husky": "^9.0.0",
     "jest": "^29.0.0",
-    "jest-extended": "^4.0.0",
-    "lerna": "^6.0.0",
-    "manual-git-changelog": "^1.0.1",
-    "streamify-string": "^1.0.1",
+    "lerna": "^8.0.0",
+    "manual-git-changelog": "^1.0.0",
+    "streamify-string": "^1.0.0",
     "ts-jest": "^29.0.0",
-    "typedoc": "^0.21.0",
-    "typescript": "^4.0.5"
+    "typedoc": "^0.28.0",
+    "typescript": "^5.0.0"
   },
-  "pre-commit": [
-    "build",
-    "lint",
-    "test"
-  ],
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "resolutions": {
-    "@rdfjs/types": "1.1.2",
+    "@types/node": "^22.0.0",
     "cross-fetch": "4.0.0"
   }
 }

@@ -1,0 +1,7 @@
+{
+  "name": "jbr",
+  "out": "documentation",
+  "theme": "default",
+  "entryPointStrategy": "packages",
+  "entryPoints": ["packages/*"]
+}

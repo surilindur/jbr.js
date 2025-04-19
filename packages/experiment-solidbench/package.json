@@ -2,23 +2,17 @@
   "name": "@jbr-experiment/solidbench",
   "version": "6.0.0",
   "description": "SolidBench experiment handler for JBR",
-  "main": "index.js",
-  "typings": "index",
-  "lsd:module": true,
   "author": "Ruben Taelman <rubensworks@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/rubensworks/jbr.js#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/rubensworks/jbr.js.git",
     "directory": "packages/experiment-solidbench"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "bugs": {
     "url": "https://github.com/rubensworks/jbr.js/issues"
   },
-  "homepage": "https://github.com/rubensworks/jbr.js#readme",
-  "license": "MIT",
   "keywords": [
     "experiment",
     "solid",
@@ -28,29 +22,17 @@
     "jbr",
     "benchmarking"
   ],
+  "main": "lib/index.js",
+  "typings": "lib/index",
+  "lsd:module": true,
   "files": [
+    "components",
     "lib/**/*.d.ts",
     "lib/**/*.js",
-    "lib/templates",
-    "index.d.ts",
-    "index.ts",
-    "components"
+    "lib/templates"
   ],
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "../../tsconfig.json"
-      }
-    },
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "collectCoverage": true
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "node \"../../node_modules/jest/bin/jest.js\" ${1}",
@@ -58,17 +40,17 @@
     "build": "node \"../../node_modules/typescript/bin/tsc\"",
     "validate": "npm ls"
   },
-  "devDependencies": {
-    "jbr": "^6.0.0"
-  },
   "peerDependencies": {
     "jbr": ">=2.0.0"
   },
   "dependencies": {
-    "@types/fs-extra": "^9.0.11",
+    "@types/fs-extra": "^11.0.0",
     "@types/yargs": "^17.0.0",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^11.0.0",
     "solidbench": "^2.1.0",
     "sparql-benchmark-runner": "^5.0.0"
+  },
+  "devDependencies": {
+    "jbr": "^6.0.0"
   }
 }
